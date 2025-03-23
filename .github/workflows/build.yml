@@ -1,4 +1,4 @@
-name: Build And Artifacts
+name: Build
 on:
     push:
         branches: [main, dev]
@@ -27,9 +27,9 @@ jobs:
           - name: Build
             run: pnpm build --release-branch=${{ github.ref_name }} --build-minify
 
-          # Upload the build artifacts to GitHub
+          # Upload the build artifacts to GitHub (using v2 for stability)
           - name: Upload build artifacts
-            uses: actions/upload-artifact@v3
+            uses: actions/upload-artifact@v2
             with:
                 name: build-artifacts
                 path: dist/**
