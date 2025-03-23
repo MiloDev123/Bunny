@@ -1,4 +1,5 @@
 name: Build
+
 on:
     push:
         branches: [main, dev]
@@ -7,34 +8,29 @@ on:
 
 jobs:
     build:
-        name: Build and upload artifacts
+        name: Build and upload artifact
         runs-on: ubuntu-latest
 
         steps:
-          - name: Checkout code
+          - name: Checkout
             uses: actions/checkout@v4
 
-          - name: Set up Node.js
-            uses: actions/setup-node@v4
+          - uses: actions/setup-node@v4
             with:
                 node-version: 20
 
           - name: Install pnpm and dependencies
             run: |
                 npm i -g pnpm
-                pnpm install
+                pnpm i
 
           - name: Build
             run: pnpm build --release-branch=${{ github.ref_name }} --build-minify
 
-          # Upload the build artifacts to GitHub (using v2 for stability)
-          - name: Upload build artifacts
-            uses: actions/upload-artifact@v2
-            with:
-                name: build-artifacts
-                path: dist/**
+          # TODO: Check for linting?
 
-          # Optional: If you want to keep your workspace clean, you can add this step to remove build artifacts locally
-          - name: Clean up workspace
-            run: |
-                rm -rf dist/*
+          - name: Upload artifact
+            uses: actions/upload-artifact@v3
+            with:
+                name: build
+                path: dist/
